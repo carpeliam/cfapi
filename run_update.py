@@ -3,6 +3,7 @@ from urlparse import urlparse
 from csv import DictReader, Sniffer
 from StringIO import StringIO
 from requests import get
+import requests
 
 from app import db, Project, Organization
 
