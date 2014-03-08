@@ -3,7 +3,7 @@
 # -------------------
 
 from flask import Flask, make_response, request, current_app
-from datetime import timedelta
+from datetime import datetime, timedelta
 from functools import update_wrapper
 import json, os, requests
 from flask.ext.heroku import Heroku
@@ -150,11 +150,24 @@ class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Unicode())
     description = db.Column(db.Unicode())
+    event_url = db.Column(db.Unicode())
     location = db.Column(db.Unicode())
     start_time = db.Column(db.DateTime())
     end_time = db.Column(db.DateTime())
-    organization_name = db.Column(db.Unicode(), db.ForeignKey('organization.name'))
+    organization_name = db.Column(db.Unicode(),db.ForeignKey('organization.name'))
     keep = db.Column(db.Boolean())
+
+    def __init__(self, name, location, event_url, start_time, created_at,
+                 organization_name, end_time=None, description=None):
+        self.name = name
+        self.description = description
+        self.location = location
+        self.event_url = event_url
+        self.start_time = start_time
+        self.end_time = end_time
+        self.organization_name = organization_name
+        self.created_at = created_at
+        self.keep = True
 
 # -------------------
 # API
