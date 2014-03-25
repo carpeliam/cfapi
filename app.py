@@ -11,7 +11,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.mutable import Mutable
 from sqlalchemy import types
 import flask.ext.restless
-
+from dictalchemy import make_class_dictable
 
 # -------------------
 # Init
@@ -20,7 +20,7 @@ import flask.ext.restless
 app = Flask(__name__)
 heroku = Heroku(app)
 db = SQLAlchemy(app)
-
+make_class_dictable(db.Model)
 
 # -------------------
 # Settings
@@ -96,6 +96,13 @@ class Organization(db.Model):
         self.latitude = latitude
         self.longitude = longitude
         self.keep = True
+
+    def recent_events(self):
+        what = Event.query.order_by(Event.start_time.desc()).limit(2).all()
+        results = [row.asdict() for row in what]
+        return results
+
+        
 
 class Story(db.Model):
     '''
@@ -183,8 +190,8 @@ class Event(db.Model):
 # -------------------
 
 manager = flask.ext.restless.APIManager(app, flask_sqlalchemy_db=db)
+manager.create_api(Organization, collection_name='organizations', methods=['GET'], exclude_columns=['keep','events'], include_methods=['recent_events'])
 kwargs = dict(methods=['GET'], exclude_columns=['keep'], max_results_per_page=None)
-manager.create_api(Organization, collection_name='organizations', **kwargs)
 manager.create_api(Story, collection_name='stories', **kwargs)
 manager.create_api(Project, collection_name='projects', **kwargs)
 manager.create_api(Event, collection_name='events', **kwargs)
