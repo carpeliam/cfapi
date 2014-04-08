@@ -43,7 +43,7 @@ class RunUpdateTestCase(unittest.TestCase):
         if url.geturl() == 'http://example.com/cfa-projects.csv':
             return response(200, '''name,description,link_url,code_url,type,categories\n,"Thing for ""stuff"".",,https://github.com/codeforamerica/cityvoice,web service,"community engagement, housing"\nSouthBendVoices,,,https://github.com/codeforamerica/cityvoice,,''')
 
-        elif url.geturl() == run_update.gdocs_url:
+        elif url.geturl() in run_update.gdocs_urls:
             return response(200, '''name,website,events_url,rss,projects_list_url\nCode for America,http://codeforamerica.org,http://www.meetup.com/events/Code-For-Charlotte/,http://www.codeforamerica.org/blog/feed/,http://example.com/cfa-projects.csv\nCode for America (2),,,,https://github.com/codeforamerica\nCode for America (3),,,,https://www.github.com/orgs/codeforamerica''')
 
         elif url.geturl() == 'https://api.github.com/repos/codeforamerica/cityvoice':
@@ -212,7 +212,7 @@ class RunUpdateTestCase(unittest.TestCase):
             if url.geturl() == 'http://example.com/cfa-projects.csv':
                 return response(200, '''name,description,link_url,code_url,type,categories\n,,,https://github.com/codeforamerica/cityvoice,web service,"community engagement, housing"\nSouthBendVoices,,,https://github.com/codeforamerica/cityvoice,,''')
 
-            elif url.geturl() == run_update.gdocs_url:
+            elif url.geturl() in run_update.gdocs_urls:
                 return response(200, '''name,website,events_url,rss,projects_list_url\nCode for America,http://codeforamerica.org,http://www.meetup.com/events/Code-For-Charlotte/,http://www.codeforamerica.org/blog/feed/,http://example.com/cfa-projects.csv''')
 
             elif url.geturl() == 'https://api.github.com/repos/codeforamerica/cityvoice':
@@ -253,7 +253,7 @@ class RunUpdateTestCase(unittest.TestCase):
             if url.geturl() == 'http://example.com/cfa-projects.csv':
                 return response(200, '''name,description,link_url,code_url,type,categories\n,,,https://github.com/codeforamerica/cityvoice,web service,"community engagement, housing"\nSouthBendVoices,,,https://github.com/codeforamerica/cityvoice,,''')
 
-            elif url.geturl() == run_update.gdocs_url:
+            elif url.geturl() in run_update.gdocs_urls:
                 return response(200, '''name,website,events_url,rss,projects_list_url\nCode for America,http://codeforamerica.org,http://codeforamerica.org/events,http://www.codeforamerica.org/blog/feed/,http://example.com/cfa-projects.csv''')
 
             elif url.geturl() == 'https://api.github.com/repos/codeforamerica/cityvoice':
@@ -329,7 +329,7 @@ class RunUpdateTestCase(unittest.TestCase):
         def response_content(url, request):
             import run_update
 
-            if url.geturl() == run_update.gdocs_url:
+            if url.geturl() in run_update.gdocs_urls:
                 return response(200, '''name,website,events_url,rss,projects_list_url\nCode_for_America,http://codeforamerica.org,http://www.meetup.com/events/foo-%%%,http://www.codeforamerica.org/blog/feed/,http://example.com/cfa-projects.csv\nCode/for/America,http://codeforamerica.org,http://www.meetup.com/events/foo-%%%,http://www.codeforamerica.org/blog/feed/,http://example.com/cfa-projects.csv''')
 
             else:
@@ -359,7 +359,7 @@ class RunUpdateTestCase(unittest.TestCase):
             if url.geturl() == 'http://example.com/cfa-projects.csv':
                 return response(200, '''name,description,link_url,code_url,type,categories\n,,,https://github.com/codeforamerica/cityvoice,web service,"community engagement, housing"\nSouthBendVoices,,,https://github.com/codeforamerica/cityvoice,,''')
 
-            elif url.geturl() == run_update.gdocs_url:
+            elif url.geturl() in run_update.gdocs_urls:
                 return response(200, '''name,website,events_url,rss,projects_list_url\nCode for America,http://codeforamerica.org,http://www.meetup.com/events/foo-%%%,http://www.codeforamerica.org/blog/feed/,http://example.com/cfa-projects.csv''')
 
             elif url.geturl() == 'https://api.github.com/repos/codeforamerica/cityvoice':
@@ -408,7 +408,7 @@ class RunUpdateTestCase(unittest.TestCase):
             if url.geturl() == 'http://example.com/cfa-projects.csv':
                 return response(200, '''name,description,link_url,code_url,type,categories\n,,,https://github.com/codeforamerica/cityvoice,web service,"community engagement, housing"\nSouthBendVoices,,,https://github.com/codeforamerica/cityvoice,,''')
 
-            elif url.geturl() == run_update.gdocs_url:
+            elif url.geturl() in run_update.gdocs_urls:
                 return response(200, '''name,website,events_url,rss,projects_list_url\nCode for America,http://codeforamerica.org,http://www.meetup.com/events/Code-For-Charlotte,http://www.codeforamerica.org/blog/feed/,http://example.com/cfa-projects.csv''')
 
             elif url.geturl() == 'https://api.github.com/repos/codeforamerica/cityvoice':
