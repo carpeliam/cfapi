@@ -162,6 +162,13 @@ class Organization(db.Model):
         organization_name = safe_name(self.name)
         return '%s://%s/api/organizations/%s/projects' % (request.scheme, request.host, organization_name)
 
+    def project_autocomplete(self):
+        ''' API link for project autocompletion
+        '''
+        # Make a nice org name
+        organization_name = safe_name(self.name)
+        return '%s://%s/api/organizations/%s/projects/autocomplete' % (request.scheme, request.host, organization_name)
+
     def all_stories(self):
         ''' API link to all an orgs stories
         '''
@@ -188,8 +195,8 @@ class Organization(db.Model):
 
         del organization_dict['keep']
 
-        for key in ('all_events', 'all_projects', 'all_stories',
-                    'upcoming_events', 'past_events', 'api_url'):
+        for key in ('all_events', 'all_projects', 'project_autocomplete',
+                    'all_stories', 'upcoming_events', 'past_events', 'api_url'):
             organization_dict[key] = getattr(self, key)()
 
         if include_extras:
@@ -615,6 +622,26 @@ def get_orgs_projects(organization_name):
     query = Project.query.filter_by(organization_name=organization.name).order_by(desc(Project.last_updated))
     response = paged_results(query, int(request.args.get('page', 1)), int(request.args.get('per_page', 10)))
     return jsonify(response)
+
+@app.route("/api/organizations/<organization_name>/projects/autocomplete")
+def get_project_autocomplete_results(organization_name):
+    '''
+        An autocompleter for an organizations' projects
+    '''
+    organization = Organization.query.filter_by(name=raw_name(organization_name)).first()
+    if not organization:
+        return "Organization not found", 404
+    query = request.args.get('query', "")
+    if len(query) < 3:
+        return "Query must be at least 3 characters", 400
+    query = '%%%s%%' % (query)
+
+    # Get project objects
+    response = Project.query.filter(Project.name.ilike(query), Project.organization_name == organization.name)
+    limit = int(request.args.get('limit', 10))
+    projects = [o.asdict(True) for o in response.limit(limit)]
+    results = {'projects': projects, 'count': response.count()}
+    return jsonify(results)
 
 @app.route('/api/projects')
 @app.route('/api/projects/<int:id>')
